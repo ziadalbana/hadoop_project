@@ -1,51 +1,39 @@
 package Bigdata;
 
+import java.io.IOException;
 import java.util.*;
 
-import java.io.IOException;
-import java.io.IOException;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.conf.*;
-import org.apache.hadoop.io.*;
-import org.apache.hadoop.mapred.*;
-import org.apache.hadoop.util.*;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
 
 public class mapreduce {
-    //Mapper class
-    public static class EMapper extends MapReduceBase implements
-            Mapper<LongWritable,/*Input key Type */
-                    Text,                /*Input value Type*/
-                    Text,                /*Output key Type*/
-                    Text>        /*Output value Type*/ {
-        //Map function
-        public void map(LongWritable key, Text value,
-                        OutputCollector<Text, Text> output,
-                        Reporter reporter) throws IOException {
-            String line = value.toString().replaceAll("\'","\"");
-            try {
-                JSONObject obj = new JSONObject(line);
-                String service=obj.getString("serviceName");
-                double cpuU=obj.getDouble("CPU");
-                JSONObject disk=obj.getJSONObject("Disk");
-                double diskU=(disk.getDouble("Total")-disk.getDouble("Free"))/disk.getDouble("Total");
-                JSONObject ram=obj.getJSONObject("RAM");
-                double ramU=(ram.getDouble("Total")-ram.getDouble("Free"))/ram.getDouble("Total");
-                int timeStamp=obj.getInt("Timestamp");
-                String result=cpuU+" "+diskU+" "+ramU+" "+timeStamp;
-                output.collect(new Text(service), new Text(result));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        //Reducer class
-        public static class EReduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
-
-            //Reduce function
-            public void reduce(Text key, Iterator<Text> values,
-                               OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
+//        System.setProperty("hadoop.home.dir", "/");
+//        System.setProperty("HADOOP_USER_NAME", "hiberstack");
+        Configuration conf = new Configuration();
+        Job job = Job.getInstance(conf, " count");
+        job.setJarByClass(mapreduce.class);
+        job.setMapperClass(EMapper.class);
+        job.setCombinerClass(Reduce.class);
+        job.setReducerClass(Reduce.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(Text.class);
+        FileInputFormat.addInputPath(job, new Path("input"));
+        FileOutputFormat.setOutputPath(job, new Path("output"));
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
+    }
+    public static class Reduce extends  Reducer<Text, Text, Text, Text> {
+            public void reduce(Text key, Iterator<Text> values, Context output) throws IOException, InterruptedException {
                 double sumCpu=0;
                 double sumDisk=0;
                 double sumRAM=0;
@@ -84,8 +72,37 @@ public class mapreduce {
                 sumDisk/=countMessage;
                 sumRAM/=countMessage;
                 String result=sumCpu+" "+sumDisk+" "+sumRAM+" "+maxCpuT+" "+maxDiskT+" "+maxRAMT+" "+countMessage;
-                output.collect(key, new Text(result));
+                output.write(key, new Text(result));
+            }
+        }
+    public static class EMapper extends Mapper
+            <LongWritable,/*Input key Type */
+                    Text,                /*Input value Type*/
+                    Text,                /*Output key Type*/
+                    Text>        /*Output value Type*/
+    {
+        //Map function
+        public void map(LongWritable key, Text value, Context output)  {
+            String line = value.toString().replaceAll("\'","\"");
+            try {
+                JSONObject obj = new JSONObject(line);
+                String service=obj.getString("serviceName");
+                double cpuU=obj.getDouble("CPU");
+                JSONObject disk=obj.getJSONObject("Disk");
+                double diskU=(disk.getDouble("Total")-disk.getDouble("Free"))/disk.getDouble("Total");
+                JSONObject ram=obj.getJSONObject("RAM");
+                double ramU=(ram.getDouble("Total")-ram.getDouble("Free"))/ram.getDouble("Total");
+                int timeStamp=obj.getInt("Timestamp");
+                String result=cpuU+" "+diskU+" "+ramU+" "+timeStamp;
+                output.write(new Text(service), new Text(result));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
 }
+

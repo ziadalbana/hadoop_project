@@ -7,7 +7,9 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -82,8 +84,23 @@ public class hdfsOperation {
         bufferedWriter.close();
         fileSystem.close();
     }
-    public boolean DeleteFile(FileSystem fileSystem,String dest) throws IOException {
+    public boolean DeleteFile(String dest) throws IOException {
+        FileSystem fileSystem = configureFileSystem();
         Path hdfsPath = new Path(dest);
         return fileSystem.delete(hdfsPath,true);
+    }
+    public String ReadFile( String dest) {
+        FileSystem fileSystem = configureFileSystem();
+        Path hdfsReadPath = new Path(dest);
+        String out= null;
+        try {
+            FSDataInputStream inputStream = fileSystem.open(hdfsReadPath);
+            out = IOUtils.toString(inputStream, "UTF-8");
+            inputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return out;
     }
 }

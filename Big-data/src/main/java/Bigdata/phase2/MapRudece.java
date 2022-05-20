@@ -1,6 +1,7 @@
-package Bigdata;
+package Bigdata.phase2;
 
-import com.google.gson.JsonObject;
+import Bigdata.hdfsOperation;
+import Bigdata.serviceResult;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.PathFilter;
@@ -18,7 +19,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class MapRudece {
@@ -61,7 +61,7 @@ public class MapRudece {
             System.out.println(lines[i]);
             String[] line=lines[i].split(",");
             serviceResult m=new serviceResult(
-                    line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7]);
+                    line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10]);
             Result.add(m);
         }
         return Result;
@@ -105,7 +105,7 @@ public class MapRudece {
             sumCpu/=countMessage;
             sumDisk/=countMessage;
             sumRAM/=countMessage;
-            String result=","+sumCpu+","+sumDisk+","+sumRAM+","+maxCpuT+","+maxDiskT+","+maxRAMT+","+countMessage;
+            String result=","+sumCpu+","+maxCPU+","+maxCpuT+","+sumDisk+","+maxDisk+","+maxDiskT+","+sumRAM+","+maxRAM+","+maxRAMT+","+countMessage;
             output.write(key, new Text(result));
         }
     }
@@ -146,8 +146,6 @@ public class MapRudece {
             //The valid range of dates and days for directories and files can be input
             //as arguments to the job.
             //Return true if you find a match or else return false.
-//            String from=conf.get("from");
-//            String to=conf.get("to");
             System.out.println(path.getName());
             String from=conf.get("from");
             String to=conf.get("to");

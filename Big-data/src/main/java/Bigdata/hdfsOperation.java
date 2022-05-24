@@ -6,13 +6,11 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.*;
 
 public class hdfsOperation {
     public  FileSystem configureFileSystem() {
@@ -45,9 +43,10 @@ public class hdfsOperation {
         }
         return false;
     }
-    public  void writeFileToHDFS(String filePath,String fileName,ArrayList<String>jsons) throws IOException {
+    public  void writeFileToHDFS(String filePath,String fileName,ArrayList<String>jsons) {
         FileSystem fileSystem = configureFileSystem();
         //Create a path
+        try {
         Path hdfsWritePath = new Path(filePath+ fileName);
         FSDataOutputStream fsDataOutputStream = fileSystem.create(hdfsWritePath,true);
         BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fsDataOutputStream, StandardCharsets.UTF_8));
@@ -57,6 +56,9 @@ public class hdfsOperation {
         }
         bufferedWriter.close();
         fileSystem.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public  void appendToHDFSFile(String filePath,String fileName,ArrayList<String> jsons) throws IOException {
@@ -102,5 +104,23 @@ public class hdfsOperation {
         }
 
         return out;
+    }
+    public  List<String> getAllFilePath(Path filePath)  {
+        FileSystem fs = configureFileSystem();
+        List<String> fileList = new ArrayList();
+        FileStatus[] fileStatus ;
+        try {
+            fileStatus = fs.listStatus(filePath);
+        for (FileStatus fileStat : fileStatus) {
+            if (fileStat.isDirectory()) {
+                fileList.addAll(getAllFilePath(fileStat.getPath()));
+            } else {
+                fileList.add(fileStat.getPath().toString());
+            }
+        }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return fileList;
     }
 }

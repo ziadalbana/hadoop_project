@@ -41,7 +41,7 @@ public class dataPreprocessing {
                             oldTime=timeFormated;
                             jsons.add(e.toString());
                         } else {
-                            operation.writeFileToHDFS("/user/hiberstack/messages/", timeFormated, jsons);
+                            operation.writeFileToHDFS("/user/hiberstack/messages/", oldTime, jsons);
                             oldTime = timeFormated;
                             System.out.println(jsons.size());
                             jsons = new ArrayList<>();

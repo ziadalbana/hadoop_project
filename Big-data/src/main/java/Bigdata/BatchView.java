@@ -77,11 +77,7 @@ public class BatchView {
             FileInputFormat.addInputPath(job, new Path(fileminPath));
             FileOutputFormat.setOutputPath(job, new Path("hdfs://localhost:9000//user//hiberstack//output"));
             job.waitForCompletion(true);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return getResults(fileminPath.substring(fileminPath.lastIndexOf("/")));

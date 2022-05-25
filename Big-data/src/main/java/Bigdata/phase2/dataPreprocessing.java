@@ -20,17 +20,17 @@ public class dataPreprocessing {
     }
     public void reader() {
         InputStream is = null;
+        ArrayList<String> jsons = new ArrayList<>();
+        String timeFormated = "";
         try {
             File folder = new File("health_data");
             File[] listOfFiles = folder.listFiles();
             for (int i = 0; i < listOfFiles.length; i++) {
                 is = new FileInputStream(listOfFiles[i].getAbsolutePath());
-                ArrayList<String> jsons = new ArrayList<>();
                 Reader r = new InputStreamReader(is, "UTF-8");
                 Gson gson = new GsonBuilder().create();
                 JsonStreamParser p = new JsonStreamParser(r);
                 String oldTime = "";
-                String timeFormated = "";
                 while (p.hasNext()) {
                     JsonElement e = p.next();
                     if (e.isJsonObject()) {
@@ -50,10 +50,10 @@ public class dataPreprocessing {
 
                     }
                 }
-                if (jsons.size() > 0) {
-                    operation.writeFileToHDFS("/user/hiberstack/messages/", timeFormated, jsons);
-                    System.out.println(jsons.size());
-                }
+            }
+            if (jsons.size() > 0) {
+                operation.writeFileToHDFS("/user/hiberstack/messages/", timeFormated, jsons);
+                System.out.println(jsons.size());
             }
         } catch (Exception e) {
             e.printStackTrace();

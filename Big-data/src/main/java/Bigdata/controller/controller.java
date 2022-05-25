@@ -1,6 +1,6 @@
 package Bigdata.controller;
 
-import Bigdata.MapRudece;
+import Bigdata.phase2.MapRudece;
 import Bigdata.serviceResult;
 import org.springframework.web.bind.annotation.*;
 

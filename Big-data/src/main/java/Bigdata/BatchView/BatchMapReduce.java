@@ -1,5 +1,6 @@
-package Bigdata;
+package Bigdata.BatchView;
 
+import org.apache.avro.Schema;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.PathFilter;
 import org.apache.hadoop.io.LongWritable;
@@ -10,8 +11,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class BatchMapReduce {
+    private static String getTime(double time){
+        Date date = new java.util.Date((long) (time*1000L));
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd-HH-mm");
+        return sdf.format(date);
+    }
+
     public static class map extends Mapper
             <LongWritable,/*Input key Type */
                     Text,                /*Input value Type*/
@@ -30,8 +39,9 @@ public class BatchMapReduce {
                 JSONObject ram=obj.getJSONObject("RAM");
                 double ramU=(ram.getDouble("Total")-ram.getDouble("Free"))/ram.getDouble("Total");
                 int timeStamp=obj.getInt("Timestamp");
+                String keycombine=service+","+getTime(timeStamp);
                 String result=cpuU+" "+diskU+" "+ramU+" "+timeStamp;
-                output.write(new Text(service), new Text(result));
+                output.write(new Text(keycombine), new Text(result));
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (IOException e) {

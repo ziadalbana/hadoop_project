@@ -1,4 +1,4 @@
-package Bigdata;
+package Bigdata.Utilits;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

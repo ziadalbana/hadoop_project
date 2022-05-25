@@ -1,6 +1,6 @@
 package Bigdata.phase2;
 
-import Bigdata.hdfsOperation;
+import Bigdata.Utilits.hdfsOperation;
 import Bigdata.serviceResult;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -61,7 +61,7 @@ public class MapRudece {
             System.out.println(lines[i]);
             String[] line=lines[i].split(",");
             serviceResult m=new serviceResult(
-                    line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10]);
+                    line[0],"",line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10]);
             Result.add(m);
         }
         return Result;

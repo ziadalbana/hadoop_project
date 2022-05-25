@@ -1,6 +1,6 @@
 package Bigdata.phase2;
 
-import Bigdata.hdfsOperation;
+import Bigdata.Utilits.hdfsOperation;
 import com.google.gson.*;
 
 import java.io.*;

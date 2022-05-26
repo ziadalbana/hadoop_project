@@ -1,8 +1,7 @@
 package Bigdata.db;
 
-import Bigdata.serviceResult ;
+import Bigdata.serviceResult;
 
-import javax.swing.text.html.parser.Entity;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,8 +38,7 @@ public class duckdb {
 
     private Timestamp convertToTimeStamp(String time){
         String[] dayAndTime = time.split("-") ;
-        String timeStampAsString = dayAndTime[0] + "-" + dayAndTime[1] + "-" +  dayAndTime[2] + " " + dayAndTime[3] + ":" + dayAndTime[4]+":00" ;
-        System.out.println(timeStampAsString);
+        String timeStampAsString = dayAndTime[0] + "-" + dayAndTime[1] + "-" +  dayAndTime[2] + " " + dayAndTime[3] + ":" + dayAndTime[4]+ ":00" ;
         Timestamp ts = Timestamp.valueOf(timeStampAsString) ;
         return ts ;
     }
@@ -49,12 +47,32 @@ public class duckdb {
     public HashMap<String,serviceResult> QueryAPI(String from , String to) throws ClassNotFoundException, SQLException {
 
         String day = convertToTimeStamp(from).toString().split(" ")[0] ;
+        String day2 = convertToTimeStamp(to).toString().split(" ")[0] ;
         String currentday = LocalDate.now().toString();
 
-        if (day.equals(currentday))
-            return realTimeViewQuery(day,from,to) ;
-        else
-            return batchViewQuery(day,from,to) ;
+        if ( ! day.equals(day2)){
+
+            String d1End = day + "-23-59" ;
+            String d1Start = from ;
+            String d2End = to ;
+            String d2Start  = day2 + "-00-00" ;
+
+            System.out.println(d1Start);
+            System.out.println(d1End);
+            System.out.println(d2Start);
+            System.out.println(d2End);
+
+            Map<String,serviceResult> batchResult = batchViewQuery(day,d1Start,d1End) ;
+            Map<String,serviceResult> RealtimeResult = realTimeViewQuery(day2,d2Start,d2End) ;
+
+
+            return null;
+        }else{
+            if (day.equals(currentday))
+                return realTimeViewQuery(day,from,to) ;
+            else
+                return batchViewQuery(day,from,to) ;
+        }
 
     }
 
@@ -170,10 +188,9 @@ public class duckdb {
         duckdb db = new duckdb() ;
         Timestamp ts = db.convertToTimeStamp("2022-12-10-09-00") ;
         Timestamp ts2 = db.convertToTimeStamp("2022-12-10-10-00") ;
-         while(ts2.after(ts)){
-            ts.setTime(ts.getTime() + TimeUnit.MINUTES.toMinutes(1000 * 60));
-            System.out.println(db.getFileName(ts)) ;
-        }
+
+        db.QueryAPI("2022-12-10-22-40","2022-12-11-03-21") ;
+
         return ;
     }
 }

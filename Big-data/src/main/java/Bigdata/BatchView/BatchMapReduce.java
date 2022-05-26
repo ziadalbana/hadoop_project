@@ -87,9 +87,6 @@ public class BatchMapReduce {
                 sumRAM+=tempRAM;
                 countMessage++;
             }
-            sumCpu/=countMessage;
-            sumDisk/=countMessage;
-            sumRAM/=countMessage;
             String result=","+sumCpu+","+maxCPU+","+maxCpuT+","+sumDisk+","+maxDisk+","+maxDiskT+","+sumRAM+","+maxRAM+","+maxRAMT+","+countMessage;
             output.write(key, new Text(result));
         }

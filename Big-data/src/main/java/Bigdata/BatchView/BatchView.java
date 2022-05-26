@@ -1,5 +1,6 @@
 package Bigdata.BatchView;
 
+import Bigdata.Parquet;
 import Bigdata.Utilits.hdfsOperation;
 import Bigdata.serviceResult;
 import org.apache.hadoop.conf.Configuration;
@@ -24,8 +25,11 @@ public class BatchView {
 
     private static Configuration conf;
     private hdfsOperation operation=new hdfsOperation();
+    private Parquet parquet=new Parquet();
     public void createBatch(String folderName){
+        System.setProperty("HADOOP_USER_NAME", "hiberstack");
         ArrayList<serviceResult> results=analysis("hdfs://localhost:9000//user//hiberstack//messages//"+folderName);
+        parquet.write("batchView/"+folderName+".parquet",results);
     }
 
     public ArrayList<serviceResult> analysis(String filePath){
@@ -48,9 +52,9 @@ public class BatchView {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return getResults(filePath);
+        return getResults();
     }
-    private ArrayList<serviceResult> getResults(String filePath){
+    private ArrayList<serviceResult> getResults(){
         ArrayList<serviceResult>  Result=new ArrayList<>();
         String results=operation.ReadFile("hdfs://localhost:9000//user//hiberstack//output//part-r-00000");
         String[] lines=results.split("\\n");

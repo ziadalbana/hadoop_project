@@ -7,23 +7,23 @@ import java.io.Serializable;
 
 public class serviceResult implements Serializable {
       String service = "";
-      String  Cpu = "" ;
-      String  Disk ="";
-      String Ram= "";
-      String CpuMT= "";
-      String DiskMT ="";
-      String  RamMT= "";
-      String CpuM = "";
-      String DiskM = "";
-      String  RamM = "";
-      String count = "";
+      Double  Cpu ;
+      Double  Disk;
+      Double Ram;
+      Double CpuMT;
+      Double DiskMT;
+      Double  RamMT;
+      Double CpuM ;
+      Double DiskM;
+      Double  RamM;
+      Double count;
       String timeStamp ="";
       public  serviceResult(){}
       public  serviceResult( String service,String timeStamp,
-    String  Cpu, String CpuM, String CpuMT,
-    String  Disk,String DiskM,String DiskMT,
-    String Ram,String  RamM, String  RamMT,
-    String count){
+                             double  Cpu, double CpuM, double CpuMT,
+                             double  Disk,double DiskM,double DiskMT,
+                             double Ram,double  RamM, double  RamMT,
+                             double count){
           this.service=service;
           this.Cpu=Cpu;
           this.Disk=Disk;
@@ -43,6 +43,7 @@ public class serviceResult implements Serializable {
 //        return sdf.format(date);
 //    }
 
+
     public String getService() {
         return service;
     }
@@ -51,84 +52,92 @@ public class serviceResult implements Serializable {
         this.service = service;
     }
 
-    public String getCpu() {
+    public Double getCpu() {
         return Cpu;
     }
 
-    public void setCpu(String cpu) {
+    public void setCpu(Double cpu) {
         Cpu = cpu;
     }
 
-    public String getDisk() {
+    public Double getDisk() {
         return Disk;
     }
 
-    public void setDisk(String disk) {
+    public void setDisk(Double disk) {
         Disk = disk;
     }
 
-    public String getRam() {
+    public Double getRam() {
         return Ram;
     }
 
-    public void setRam(String ram) {
+    public void setRam(Double ram) {
         Ram = ram;
     }
 
-    public String getCpuMT() {
+    public Double getCpuMT() {
         return CpuMT;
     }
 
-    public void setCpuMT(String cpuMT) {
+    public void setCpuMT(Double cpuMT) {
         CpuMT = cpuMT;
     }
 
-    public String getDiskMT() {
+    public Double getDiskMT() {
         return DiskMT;
     }
 
-    public void setDiskMT(String diskMT) {
+    public void setDiskMT(Double diskMT) {
         DiskMT = diskMT;
     }
 
-    public String getRamMT() {
+    public Double getRamMT() {
         return RamMT;
     }
 
-    public void setRamMT(String ramMT) {
+    public void setRamMT(Double ramMT) {
         RamMT = ramMT;
     }
 
-    public String getCount() {
-        return count;
-    }
-
-    public void setCount(String count) {
-        this.count = count;
-    }
-
-    public String getCpuM() {
+    public Double getCpuM() {
         return CpuM;
     }
 
-    public void setCpuM(String cpuM) {
+    public void setCpuM(Double cpuM) {
         CpuM = cpuM;
     }
 
-    public String getDiskM() {
+    public Double getDiskM() {
         return DiskM;
     }
 
-    public void setDiskM(String diskM) {
+    public void setDiskM(Double diskM) {
         DiskM = diskM;
     }
 
-    public String getRamM() {
+    public Double getRamM() {
         return RamM;
     }
 
-    public void setRamM(String ramM) {
+    public void setRamM(Double ramM) {
         RamM = ramM;
+    }
+
+    public Double getCount() {
+        return count;
+    }
+
+    public void setCount(Double count) {
+        this.count = count;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     @Override

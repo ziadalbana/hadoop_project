@@ -1,5 +1,7 @@
-package Bigdata;
+package Bigdata.RealTimeView;
 
+import Bigdata.Parquet;
+import Bigdata.serviceResult;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.*;
@@ -10,7 +12,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class RealTimeView {
-    private  Parquet parquet=new Parquet();
+    private Parquet parquet=new Parquet();
 
 
     private static final Pattern SPACE = Pattern.compile(" ");
@@ -97,22 +99,18 @@ public class RealTimeView {
                 countMessage++;
             }
 
-            sumCpu /= countMessage;
-            sumDisk /= countMessage;
-            sumRAM /= countMessage;
-
             return new serviceResult(values._1,
                     fileName,
-                    String.valueOf(sumCpu),
-                    String.valueOf(maxCPU),
-                    String.valueOf(maxCpuT),
-                    String.valueOf(sumDisk),
-                    String.valueOf(maxDisk),
-                    String.valueOf(maxDiskT),
-                    String.valueOf(sumRAM),
-                    String.valueOf(maxRAM),
-                    String.valueOf(maxRAMT),
-                    String.valueOf(countMessage));
+                    sumCpu,
+                    maxCPU,
+                    maxCpuT,
+                    sumDisk,
+                    maxDisk,
+                    maxDiskT,
+                    sumRAM,
+                    maxRAM,
+                    maxRAMT,
+                    countMessage);
         });
 
         List<serviceResult> output = counts.collect();

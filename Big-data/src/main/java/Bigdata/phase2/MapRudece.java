@@ -61,7 +61,7 @@ public class MapRudece {
             System.out.println(lines[i]);
             String[] line=lines[i].split(",");
             serviceResult m=new serviceResult(
-                    line[0],"",line[1],line[2],line[3],line[4],line[5],line[6],line[7],line[8],line[9],line[10]);
+                    line[0],"",Double.parseDouble(line[1]),Double.parseDouble(line[2]),Double.parseDouble(line[3]),Double.parseDouble(line[4]),Double.parseDouble(line[5]),Double.parseDouble(line[6]),Double.parseDouble(line[7]),Double.parseDouble(line[8]),Double.parseDouble(line[9]),Double.parseDouble(line[10]));
             Result.add(m);
         }
         return Result;

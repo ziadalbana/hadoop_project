@@ -1,6 +1,7 @@
 package Bigdata;
 
 import Bigdata.BatchView.BatchView;
+import Bigdata.RealTimeView.RealTimeView;
 import org.apache.avro.Schema;
 import org.apache.avro.reflect.ReflectData;
 import org.apache.hadoop.conf.Configuration;
@@ -38,13 +39,11 @@ public class test {
     public static void main(String[] args) throws IOException {
 //        Path dataFile = new Path("/tmp/demo.snappy.parquet");
 
-//       ArrayList<String> s= (ArrayList<String>) Files.readAllLines(Paths.get("2022-04-12"));
-//       RealTimeView r=new RealTimeView();
-//       List<serviceResult> ss=r.calculate(s,"2022-04-12");
-//       Parquet p=new Parquet();
-//       p.write("realtime.parquet",ss);
-        BatchView b=new BatchView();
-        b.createBatch("2022-04-10");
+       ArrayList<String> s= (ArrayList<String>) Files.readAllLines(Paths.get("2022-04-12"));
+       RealTimeView r=new RealTimeView();
+       r.calculate(s,"2022-04-12");
+//        BatchView b=new BatchView();
+//        b.createBatch("2022-04-10");
 
     }
 }

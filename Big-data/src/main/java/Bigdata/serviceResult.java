@@ -8,16 +8,16 @@ import java.io.Serializable;
 public class serviceResult implements Serializable {
 
       String service = "";
-      Double  Cpu ;
-      Double  Disk;
-      Double Ram;
-      Double CpuMT;
-      Double DiskMT;
-      Double  RamMT;
-      Double CpuM ;
-      Double DiskM;
-      Double  RamM;
-      Double count;
+      Double  Cpu=0.0;
+      Double  Disk=0.0;
+      Double Ram=0.0;
+      Double CpuMT=0.0;
+      Double DiskMT=0.0;
+      Double  RamMT=0.0;
+      Double CpuM =0.0;
+      Double DiskM=0.0;
+      Double  RamM=0.0;
+      Double count=0.0;
       String timeStamp ="";
 
       public  serviceResult(){}

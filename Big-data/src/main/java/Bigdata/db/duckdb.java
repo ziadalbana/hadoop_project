@@ -40,6 +40,7 @@ public class duckdb {
     private Timestamp convertToTimeStamp(String time){
         String[] dayAndTime = time.split("-") ;
         String timeStampAsString = dayAndTime[0] + "-" + dayAndTime[1] + "-" +  dayAndTime[2] + " " + dayAndTime[3] + ":" + dayAndTime[4]+":00" ;
+        System.out.println(timeStampAsString);
         Timestamp ts = Timestamp.valueOf(timeStampAsString) ;
         return ts ;
     }
@@ -66,7 +67,9 @@ public class duckdb {
 
         while (fromTimeStamp.before(toTimeStamp) || fromTimeStamp.equals(toTimeStamp)){
 
-            tablePath = "'" + "realtimeview/" + from + ".parquet" + "' " ;
+            String fileName = getFileName(fromTimeStamp) ;
+
+            tablePath = "'" + "realtimeview/" + fileName + ".parquet" + "' " ;
 
             ResultSet payload = stmt.executeQuery("SELECT * FROM " +  tablePath + ";") ;
             processPayload(payload,fromTimeStamp,toTimeStamp);
@@ -76,6 +79,14 @@ public class duckdb {
         }
 
         return map ;
+    }
+
+    private String getFileName(Timestamp ts){
+        String hours = ts.getHours() + "" ;
+        if (hours.length() != 2) hours = "0" + hours ;
+        String minutes = ts.getMinutes() + "" ;
+        if (minutes.length() != 2 ) minutes = "0" + minutes ;
+        return hours + "-" + minutes ;
     }
 
     private HashMap<String,serviceResult> batchViewQuery(String day, String from , String to) throws SQLException {
@@ -156,7 +167,13 @@ public class duckdb {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         duckdb db = new duckdb() ;
-        
+        Timestamp ts = db.convertToTimeStamp("2022-12-10-09-00") ;
+        Timestamp ts2 = db.convertToTimeStamp("2022-12-10-10-00") ;
+         while(ts2.after(ts)){
+            ts.setTime(ts.getTime() + TimeUnit.MINUTES.toMinutes(1000 * 60));
+            System.out.println(db.getFileName(ts)) ;
+        }
+
         return ;
     }
 }

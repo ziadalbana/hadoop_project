@@ -6,18 +6,18 @@ import java.io.Serializable;
 
 
 public class serviceResult implements Serializable {
-      String service;
-      String  Cpu;
-      String  Disk;
-      String Ram;
-      String CpuMT;
-      String DiskMT;
-      String  RamMT;
-      String CpuM;
-      String DiskM;
-      String  RamM;
-      String count;
-      String timeStamp;
+      String service = "";
+      String  Cpu = "" ;
+      String  Disk ="";
+      String Ram= "";
+      String CpuMT= "";
+      String DiskMT ="";
+      String  RamMT= "";
+      String CpuM = "";
+      String DiskM = "";
+      String  RamM = "";
+      String count = "";
+      String timeStamp ="";
       public  serviceResult(){}
       public  serviceResult( String service,String timeStamp,
     String  Cpu, String CpuM, String CpuMT,

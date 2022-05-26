@@ -128,8 +128,9 @@ public class duckdb {
             serviceResult currentService = map.get(service);
 
             currentService.setCount(currentService.getCount() + count);
-            currentService.setCount(currentService.getCpu() + cpu);
-            currentService.setCount(currentService.getRam() + ram);
+            currentService.setCpu(currentService.getCpu() + cpu);
+            currentService.setRam(currentService.getRam() + ram);
+            currentService.setDisk(currentService.getDisk() + disk);
 
             Double cpuMSoFar = currentService.getCpuM() ;
             Double diskMSoFar = currentService.getDiskM() ;

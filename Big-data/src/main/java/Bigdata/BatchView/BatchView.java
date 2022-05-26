@@ -29,7 +29,7 @@ public class BatchView {
     public void createBatch(String folderName){
         System.setProperty("HADOOP_USER_NAME", "hiberstack");
         ArrayList<serviceResult> results=analysis("hdfs://localhost:9000//user//hiberstack//messages//"+folderName);
-        parquet.write("batchView/"+folderName+".parquet",results);
+        parquet.write("batchview/"+folderName+".parquet",results);
     }
 
     public ArrayList<serviceResult> analysis(String filePath){

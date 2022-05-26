@@ -2,10 +2,12 @@ package Bigdata.db;
 
 import Bigdata.serviceResult ;
 
+import javax.swing.text.html.parser.Entity;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class duckdb {
@@ -101,16 +103,16 @@ public class duckdb {
             if (!(lowerBound && upperBound)) continue;
 
             String service = payload.getString("service") ;
-            String cpu = payload.getString("Cpu") ;
-            String cpuM = payload.getString("CpuM") ;
-            String cpuMT = payload.getString("CpuMT") ;
-            String disk = payload.getString("Disk") ;
-            String diskM = payload.getString("DiskM") ;
-            String diskMT = payload.getString("DiskMT") ;
-            String ram = payload.getString("Ram") ;
-            String ramM = payload.getString("RamM") ;
-            String ramMT = payload.getString("RamMT") ;
-            String count = payload.getString("count") ;
+            Double cpu = payload.getDouble("Cpu") ;
+            Double cpuM = payload.getDouble("CpuM") ;
+            Double cpuMT = payload.getDouble("CpuMT") ;
+            Double disk = payload.getDouble("Disk") ;
+            Double diskM = payload.getDouble("DiskM") ;
+            Double diskMT = payload.getDouble("DiskMT") ;
+            Double ram = payload.getDouble("Ram") ;
+            Double ramM = payload.getDouble("RamM") ;
+            Double ramMT = payload.getDouble("RamMT") ;
+            Double count = payload.getDouble("count") ;
 
             serviceResult currentService = map.get(service);
 
@@ -118,32 +120,43 @@ public class duckdb {
             currentService.setCount(currentService.getCpu() + cpu);
             currentService.setCount(currentService.getRam() + ram);
 
-            String cpuMSoFar = currentService.getCpuM() ;
-            String diskMSoFar = currentService.getDiskM() ;
-            String ramMSoFar = currentService.getRamM() ;
+            Double cpuMSoFar = currentService.getCpuM() ;
+            Double diskMSoFar = currentService.getDiskM() ;
+            Double ramMSoFar = currentService.getRamM() ;
 
 
-            if (Double.valueOf(cpuMSoFar) < Double.valueOf(cpuM)){
+            if (cpuMSoFar < cpuM ){
                 currentService.setCpuM(cpuM);
                 currentService.setCpuMT(cpuMT);
             }
 
-            if (Double.valueOf(diskMSoFar) < Double.valueOf(diskM)){
-                currentService.setDiskM(cpuM);
-                currentService.setDiskMT(cpuMT);
+            if (diskMSoFar < diskM ){
+                currentService.setDiskM(diskM);
+                currentService.setDiskMT(diskMT);
             }
 
-            if (Double.valueOf(ramMSoFar) < Double.valueOf(ramM)){
-                currentService.setCpuM(ramM);
-                currentService.setCpuMT(ramMT);
+            if (ramMSoFar < ramM){
+                currentService.setRamM(ramM);
+                currentService.setRamMT(ramMT);
             }
 
         }
+
+        // Updating Cpu, Ram and Disk values.
+        for (Map.Entry<String,serviceResult> K : map.entrySet() ){
+            serviceResult service = K.getValue() ;
+            service.setCpu(service.getCpu() / service.getCount() );
+            service.setRam(service.getRam() / service.getCount() );
+            service.setDisk(service.getDisk() / service.getCount() );
+        }
+
+        return ;
 
     }
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         duckdb db = new duckdb() ;
-
+        
+        return ;
     }
 }

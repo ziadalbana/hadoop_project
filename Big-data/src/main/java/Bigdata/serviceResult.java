@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 
 public class serviceResult implements Serializable {
+
       String service = "";
       Double  Cpu ;
       Double  Disk;
@@ -18,6 +19,7 @@ public class serviceResult implements Serializable {
       Double  RamM;
       Double count;
       String timeStamp ="";
+
       public  serviceResult(){}
       public  serviceResult( String service,String timeStamp,
                              double  Cpu, double CpuM, double CpuMT,

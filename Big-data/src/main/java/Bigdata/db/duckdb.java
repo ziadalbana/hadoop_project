@@ -52,14 +52,14 @@ public class duckdb {
         String currentday = LocalDate.now().toString();
 
         if (day.equals(currentday))
-            return realTimeViewQuery(from,to) ;
+            return realTimeViewQuery(day,from,to) ;
         else
             return batchViewQuery(day,from,to) ;
 
     }
 
 
-    private HashMap<String,serviceResult> realTimeViewQuery(String from, String to) throws SQLException {
+    private HashMap<String,serviceResult> realTimeViewQuery(String day ,String from, String to) throws SQLException {
 
         Timestamp fromTimeStamp = convertToTimeStamp(from) ;
         Timestamp toTimeStamp = convertToTimeStamp(to) ;
@@ -67,7 +67,7 @@ public class duckdb {
 
         while (fromTimeStamp.before(toTimeStamp) || fromTimeStamp.equals(toTimeStamp)){
 
-            String fileName = getFileName(fromTimeStamp) ;
+            String fileName = day + "-" + getFileName(fromTimeStamp) ;
 
             tablePath = "'" + "realtimeview/" + fileName + ".parquet" + "' " ;
 
@@ -174,7 +174,6 @@ public class duckdb {
             ts.setTime(ts.getTime() + TimeUnit.MINUTES.toMinutes(1000 * 60));
             System.out.println(db.getFileName(ts)) ;
         }
-
         return ;
     }
 }

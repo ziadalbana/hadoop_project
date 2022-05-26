@@ -13,6 +13,7 @@ import java.util.Map;
 public class duckdb {
     public ArrayList<String> Query(String from , String to) throws ClassNotFoundException, SQLException {
         //"yyyy-mm-dd-hh-mm"
+
         Class.forName("org.duckdb.DuckDBDriver");
         Connection conn = DriverManager.getConnection("jdbc:duckdb:");
         Statement stmt = conn.createStatement();
@@ -24,7 +25,6 @@ public class duckdb {
             System.out.println(payload.getString("id"));
             System.out.println(payload.getString("first"));
             System.out.println(payload.getString("second"));
-
         }
 
         return new ArrayList<String>() ;

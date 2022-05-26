@@ -3,8 +3,7 @@ package Bigdata;
 import org.apache.hadoop.thirdparty.com.google.common.util.concurrent.Service;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 public class serviceResult implements Serializable {
       String service;
@@ -132,18 +131,21 @@ public class serviceResult implements Serializable {
         RamM = ramM;
     }
 
+    @Override
     public String toString() {
-        return this.getService()+","
-                +this.getCpu()+","
-                +this.getCpuM()+","
-                +this.getCpuMT()+","
-                +this.getDisk()+","
-                +this.getDiskM()+","
-                +this.getDiskMT()+","
-                +this.getRam()+","
-                +this.getRamM()+","
-                +this.getRamMT()+","
-                +this.getCount();
+        return "serviceResult{" +
+                "service='" + service + '\'' +
+                ", Cpu='" + Cpu + '\'' +
+                ", Disk='" + Disk + '\'' +
+                ", Ram='" + Ram + '\'' +
+                ", CpuMT='" + CpuMT + '\'' +
+                ", DiskMT='" + DiskMT + '\'' +
+                ", RamMT='" + RamMT + '\'' +
+                ", CpuM='" + CpuM + '\'' +
+                ", DiskM='" + DiskM + '\'' +
+                ", RamM='" + RamM + '\'' +
+                ", count='" + count + '\'' +
+                ", timeStamp='" + timeStamp + '\'' +
+                '}';
     }
-
 }

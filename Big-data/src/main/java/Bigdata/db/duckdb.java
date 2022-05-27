@@ -46,32 +46,62 @@ public class duckdb {
     // Dispatcher
     public HashMap<String,serviceResult> QueryAPI(String from , String to) throws ClassNotFoundException, SQLException {
 
-        String day = convertToTimeStamp(from).toString().split(" ")[0] ;
+        String day1 = convertToTimeStamp(from).toString().split(" ")[0] ;
         String day2 = convertToTimeStamp(to).toString().split(" ")[0] ;
         String currentday = LocalDate.now().toString();
 
-        if ( ! day.equals(day2)){
+        if ( !day1.equals(day2) ){
 
-            String d1End = day + "-23-59" ;
+            String d1End = day1 + "-23-59" ;
             String d1Start = from ;
             String d2End = to ;
             String d2Start  = day2 + "-00-00" ;
 
-            System.out.println(d1Start);
-            System.out.println(d1End);
-            System.out.println(d2Start);
-            System.out.println(d2End);
-
-            Map<String,serviceResult> batchResult = batchViewQuery(day,d1Start,d1End) ;
+            Map<String,serviceResult> batchResult = batchViewQuery(day1,d1Start,d1End) ;
             Map<String,serviceResult> RealtimeResult = realTimeViewQuery(day2,d2Start,d2End) ;
 
+            HashMap<String,serviceResult> res = new HashMap<>() ;
 
-            return null;
+            for (int i=1;i<=4;i++)
+                res.put("service-"+ Integer.toString(i), batchResult.get("service-"+ Integer.toString(i))) ;
+
+            for (Map.Entry<String,serviceResult> E : RealtimeResult.entrySet()){
+
+                String service = E.getKey() ;
+                serviceResult sr = E.getValue() ;
+
+                res.get(service).setCount(res.get(service).getCount() + sr.getCount());
+                res.get(service).setCpu(res.get(service).getCpu() + sr.getCpu());
+                res.get(service).setRam(res.get(service).getRam() + sr.getRam());
+                res.get(service).setDisk(res.get(service).getDisk() + sr.getDisk());
+
+                if (sr.getCpuM() > res.get(service).getCpuM()){
+                    res.get(service).setCpuM(sr.getCpuM());
+                    res.get(service).setCpuMT(sr.getCpuMT());
+                }
+
+                if (sr.getRamM() > res.get(service).getRamM()){
+                    res.get(service).setRamM(sr.getRamM());
+                    res.get(service).setRamMT(sr.getRamMT());
+                }
+
+                if (sr.getDiskM() > res.get(service).getDiskM()){
+                    res.get(service).setDiskM(sr.getDiskM());
+                    res.get(service).setDiskMT(sr.getDiskMT());
+                }
+
+                res.get(service).setCpu(res.get(service).getCpu() / res.get(service).getCount());
+                res.get(service).setDisk(res.get(service).getDisk() / res.get(service).getCount());
+                res.get(service).setRam(res.get(service).getRam() / res.get(service).getCount());
+
+            }
+
+            return res;
         }else{
-            if (day.equals(currentday))
-                return realTimeViewQuery(day,from,to) ;
+            if (day1.equals(currentday))
+                return realTimeViewQuery(day1,from,to) ;
             else
-                return batchViewQuery(day,from,to) ;
+                return batchViewQuery(day1,from,to) ;
         }
 
     }
